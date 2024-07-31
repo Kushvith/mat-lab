@@ -1,0 +1,51 @@
+package com.example.lab9;
+
+import android.annotation.SuppressLint;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class MainActivity extends AppCompatActivity {
+    private EditText usernameEdt, phonenoEdt, messageEdt;
+    private DBHandler dbHandler;
+    @SuppressLint("MissingInflatedId")
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        usernameEdt = findViewById(R.id.uname);
+        phonenoEdt = findViewById(R.id.Phno);
+        messageEdt = findViewById(R.id.Msg);
+        Button submitBtn = findViewById(R.id.sub);
+        dbHandler = new DBHandler(MainActivity.this);
+        submitBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String userName = usernameEdt.getText().toString();
+                String phonenumber = phonenoEdt.getText().toString();
+                String message = messageEdt.getText().toString();
+                if (userName.isEmpty() && phonenumber.isEmpty() && message.isEmpty()) {
+                    Toast.makeText(MainActivity.this, "Please enter all the data..",
+                            Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                dbHandler.addNewCourse(userName, phonenumber, message);
+                Toast.makeText(MainActivity.this, "Your message sent successfully",
+                        Toast.LENGTH_SHORT).show();
+                usernameEdt.setText("");
+                phonenoEdt.setText("");
+                messageEdt.setText("");
+            }
+        });
+
+    }
+}
